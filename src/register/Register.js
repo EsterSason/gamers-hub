@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-// import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 
+import AccountDetailsForm from './accountDetailsForm/AccountDetailsForm';
 import './Register.css';
 
-const styles = {
+const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -19,17 +18,42 @@ const styles = {
   textField: {
     width: '100%',
   },
-};
+  root: {
+    width: '90%',
+  },
+  button: {
+    marginRight: theme.spacing.unit,
+  },
+  instructions: {
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+  },
+});
 
 class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      username: '',
       email: '',
       password: '',
-      confirmPassword: '',
+      activeStep: 0,
     };
+  }
+
+  getSteps = () => ['Account details', 'Gaming preferences', 'Optional details'];
+
+  getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <AccountDetailsForm handleChange={this.handleChange()} />;
+      case 1:
+        return 'What is an ad group anyways?';
+      case 2:
+        return 'This is the bit I really care about!';
+      default:
+        return 'Unknown step';
+    }
   }
 
   // can handle multiple value changes
@@ -39,62 +63,63 @@ class Register extends Component {
     });
   };
 
+  handleNext = () => {
+    this.setState(state => ({
+      activeStep: state.activeStep + 1,
+    }));
+  };
+
+  handleBack = () => {
+    this.setState(state => ({
+      activeStep: state.activeStep - 1,
+    }));
+  };
+
+  handleRegister = () => {};
+
   render() {
     const { classes } = this.props;
-    const {
-      name, email, password, confirmPassword,
-    } = this.state;
+    // const {
+    //   name, email, password, confirmPassword, activeStep,
+    // } = this.state;
+
+    const { activeStep } = this.state;
+    const steps = this.getSteps();
+
     return (
       <div className="centered">
-        <Card>
-          <CardContent>
-            <Typography variant="display1" component="h2" align="center">
-              Register
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {steps.map(label => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        <div>
+          <div>
+            <Typography className={classes.instructions}>
+              {this.getStepContent(activeStep)}
             </Typography>
-            <form className={classes.container} noValidate autoComplete="off">
-              <TextField
-                id="txt-name"
-                label="Name"
-                className={classes.textField}
-                value={name}
-                onChange={this.handleChange('name')}
-                margin="normal"
-              />
-
-              <TextField
-                id="txt-email"
-                label="Email"
-                className={classes.textField}
-                value={email}
-                onChange={this.handleChange('email')}
-                margin="normal"
-              />
-              <TextField
-                id="txt-password"
-                label="Password"
-                className={classes.textField}
-                value={password}
-                onChange={this.handleChange('password')}
-                margin="normal"
-                type="password"
-              />
-              <TextField
-                id="txt-confirm-password"
-                label="Repeat Password"
-                className={classes.textField}
-                value={confirmPassword}
-                onChange={this.handleChange('confirmPassword')}
-                margin="normal"
-                type="password"
-              />
-            </form>
-          </CardContent>
-          <CardActions>
-            <Button size="small" color="primary" style={{ margin: 'auto' }}>
-              Submit
-            </Button>
-          </CardActions>
-        </Card>
+            <div>
+              <Button
+                disabled={activeStep === 0}
+                onClick={this.handleBack}
+                className={classes.backButton}
+              >
+                Back
+              </Button>
+              {activeStep === steps.length ? (
+                <Button variant="contained" color="primary" onClick={this.handleRegister}>
+                  Finish
+                </Button>
+              ) : (
+                <Button variant="contained" color="primary" onClick={this.handleNext}>
+                  Next
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

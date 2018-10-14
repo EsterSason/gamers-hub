@@ -1,7 +1,8 @@
 .centered {
   margin: auto;
-  margin-top: 5%;
+  margin-top: 1%;
   max-width: 35%;
+  min-height: 30%;
   padding: 10px;
 }
 @media screen and (max-width: 900px) {
