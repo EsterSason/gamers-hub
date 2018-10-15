@@ -38,15 +38,25 @@ class Register extends Component {
       email: '',
       password: '',
       activeStep: 0,
+      emailValid: false,
+      passwordValid: false,
+      formValid: false,
     };
   }
 
   getSteps = () => ['Account details', 'Gaming preferences', 'Optional details'];
 
   getStepContent(step) {
+    const { username, email } = this.state;
     switch (step) {
       case 0:
-        return <AccountDetailsForm handleChange={this.handleChange()} />;
+        return (
+          <AccountDetailsForm
+            handleChange={this.handleChange}
+            username={username}
+            email={email}
+          />
+        );
       case 1:
         return 'What is an ad group anyways?';
       case 2:
@@ -97,9 +107,13 @@ class Register extends Component {
         </Stepper>
         <div>
           <div>
+            {this.getStepContent(activeStep)}
+
+            {/* <div> cannot appear as a descendant of <p> -
+             This error is being fixed by the matiral ui team
+             i think i can use varian= ? to solve this
             <Typography className={classes.instructions}>
-              {this.getStepContent(activeStep)}
-            </Typography>
+            </Typography> */}
             <div>
               <Button
                 disabled={activeStep === 0}

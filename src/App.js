@@ -7,14 +7,16 @@ import Header from './header/Header';
 import Login from './login/Login';
 
 const App = () => (
-  <Router>
-    <div>
-      <Header />
-      {/* <Route path="/" component={App} /> */}
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-    </div>
-  </Router>
+  <div>
+    <Router>
+      <div>
+        <Header />
+        {/* <Route path="/" component={App} /> */}
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+      </div>
+    </Router>
+  </div>
 );
 
 // class App extends Component {
