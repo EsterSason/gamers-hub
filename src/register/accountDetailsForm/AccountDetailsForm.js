@@ -14,12 +14,13 @@ const styles = {
 };
 function AccountDetailsForm(props) {
   const {
-    username, email, classes, handleChange,
+    username, usernameValid, email, emailValid, classes, handleChange,
   } = props;
 
   return (
     <div>
       <form className={classes.container} autoComplete="off">
+
         <TextField
           id="txt-username"
           label="Username"
@@ -28,6 +29,8 @@ function AccountDetailsForm(props) {
           onChange={handleChange('username')}
           margin="normal"
           required
+          helperText={!usernameValid ? 'Please enter a valid username' : ''}
+          error={!usernameValid}
         />
 
         <TextField
@@ -38,6 +41,8 @@ function AccountDetailsForm(props) {
           onChange={handleChange('email')}
           margin="normal"
           required
+          helperText={!emailValid ? 'Please enter a valid email' : ''}
+          error={!emailValid}
         />
         <TextField
           id="txt-password"
@@ -67,6 +72,8 @@ AccountDetailsForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
+  usernameValid: PropTypes.bool.isRequired,
+  emailValid: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(AccountDetailsForm);

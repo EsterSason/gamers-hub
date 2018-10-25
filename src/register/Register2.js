@@ -10,6 +10,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import AccountDetailsForm from './accountDetailsForm/AccountDetailsForm';
 import GamingPrefsForm from './gamingPrefsForm/GamingPrefsForm';
 import './Register.css';
+import FormFieldsGenerator from '../utils/formFieldsGenerator/formFieldsGenerator';
 
 
 const styles = theme => ({
@@ -36,13 +37,21 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      email: '',
-      password: '',
+      username: {
+        element: 'input',
+        value: '',
+        label: true,
+        labelText: 'Username',
+        config: {
+          name: 'username_input',
+          text: 'text',
+          placeholder: 'Enter your username',
+        },
+        validation: {
+          valid: true,
+        },
+      },
       activeStep: 0,
-      emailValid: false,
-      usernameValid: false,
-      accountDetailsformValid: false,
     };
   }
 
@@ -114,44 +123,52 @@ class Register extends Component {
     const steps = this.getSteps();
 
     return (
-      <div className="centered">
-        <Stepper activeStep={activeStep} alternativeLabel>
-          {steps.map(label => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <div>
-          <div>
-            {this.getStepContent(activeStep)}
-
-            {/* <div> cannot appear as a descendant of <p> -
-             This error is being fixed by the matiral ui team
-             i think i can use varian= ? to solve this
-            <Typography className={classes.instructions}>
-            </Typography> */}
-            <div className="stepper-nav-buttons">
-              <Button
-                disabled={activeStep === 0}
-                onClick={this.handleBack}
-                className={classes.backButton}
-              >
-                Back
-              </Button>
-              {activeStep === steps.length ? (
-                <Button variant="contained" color="primary" onClick={this.handleRegister}>
-                  Finish
-                </Button>
-              ) : (
-                <Button variant="contained" color="primary" onClick={this.handleNext}>
-                  Next
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
+      <div>
+        <form>
+          <FormFieldsGenerator
+            formData={this.state.formData}
+            change={newState => this.updateForm(newState)}
+          />
+        </form>
       </div>
+      // <div className="centered">
+      //   <Stepper activeStep={activeStep} alternativeLabel>
+      //     {steps.map(label => (
+      //       <Step key={label}>
+      //         <StepLabel>{label}</StepLabel>
+      //       </Step>
+      //     ))}
+      //   </Stepper>
+      //   <div>
+      //     <div>
+      //       {this.getStepContent(activeStep)}
+
+    //       {/* <div> cannot appear as a descendant of <p> -
+    //        This error is being fixed by the matiral ui team
+    //        i think i can use varian= ? to solve this
+    //       <Typography className={classes.instructions}>
+    //       </Typography> */}
+    //       <div className="stepper-nav-buttons">
+    //         <Button
+    //           disabled={activeStep === 0}
+    //           onClick={this.handleBack}
+    //           className={classes.backButton}
+    //         >
+    //           Back
+    //         </Button>
+    //         {activeStep === steps.length ? (
+    //           <Button variant="contained" color="primary" onClick={this.handleRegister}>
+    //             Finish
+    //           </Button>
+    //         ) : (
+    //           <Button variant="contained" color="primary" onClick={this.handleNext}>
+    //             Next
+    //           </Button>
+    //         )}
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
     );
   }
 }
